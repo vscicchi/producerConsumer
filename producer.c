@@ -2,5 +2,12 @@
 #include <iostream>
 
 int main() {
-  char item;
+  while (true) {
+   int item;
+   while (count == BUFFER_SIZE)
+     ;
+    buffer[in] = item;
+    in = (in + 1) % BUFFER_SIZE;
+    count++;
+  }
 }
