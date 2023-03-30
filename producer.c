@@ -25,6 +25,7 @@ int main() {
   printf("\nItem Created\n");
   while (loop--) { // Until loop finishes...
     sem_wait(notFull);
+    sleep(rand()%2+1); // Wait for other processes
     sem_wait(mutex);
     (*shelf)++; // Add item to the shelf
     sem_post(mutex);
