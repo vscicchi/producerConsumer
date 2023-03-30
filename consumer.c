@@ -20,8 +20,9 @@ int main() {
   mutex = sem_open(sem3, OCREAT, 0666, 1);
   while (loop--) { // Until loop finishes...
     sem_wait(notEmpty);
+    sleep(rand()%2+1); // Wait for other processes
     sem_wait(mutex);
-    (*shelf)--;
+    (*shelf)--; // Remove item from buffer
     sem_post(mutex);
     printf("Item Consumed\n");
     sem_post(notFull);
