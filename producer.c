@@ -33,5 +33,10 @@ int main() {
       sem_post(&sh_buff.full);
     }
   }
+    
+  // Remove and Detach Semaphores
+  sem_destroy(&sh_buff.empty);
+  sem_destroy(&sh_buff.full);
+  
   return 0;
 }
