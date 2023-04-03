@@ -1,49 +1,37 @@
 #include "buffer.h"
-#include <iostream>
 
 int main() {
-  const char* sem1 = "notEmpty";
-  const char* sem2 = "notFull";
-  const char* sem3 = "mutex";
-  sem_t* notEmpty, notFull, mutex; // Shared semaphores between the processes (linked to semaphores in the buffer)
-  int* shelf;
-  int shared; // Locates share memory file and describes what is in it
-  int loop = 2; // Loop program twice (max buffer size)
-  
-  shared = shm_open("buffer", O_CREAT | O_RDWR, 0666)
-  ftruncate(shared, sizeof(int)); // Size of buffer segment
-  
-  // Map memory in process address
-  shelf = mmap(0, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, shared, 0);
+  // Set up buffer
+  sh_buff.buffer[0] = 0; // Empty
+  sh_buff.buffer[1] = 0; // Empty
+
+  int shelf = 0;
+  int value = 99; // I/O from user
   
   // Create Semaphores
-  notEmpty = sem_open(sem1, O_CREAT, 0666, 0);
-  notFull = sem_open(sem2, O_CREAT, 0666, 3);
-  mutex = sem_open(sem3, OCREAT, 0666, 1);
-  
-  // Make first item
-  printf("\nItem Created\n");
-  while (loop--) { // Until loop finishes...
-    sem_wait(notFull);
-    sleep(rand()%2+1); // Wait for other processes
-    sem_wait(mutex);
-    (*shelf)++; // Add item to the shelf
-    sem_post(mutex);
-    printf("%d Items Avaliable\n"); // Announce # in the buffer
-    sem_post(fill);
+  sem_init(&sh_buff.empty, 1, 0);
+  sem_init(&sh_buff.full, 1, 1);
+
+  while (value != 0) { // Until loop finishes...
+    if (value == 1) {
+      sem_wait(&sh_buff.empty);
+      sleep(rand()%2+1); // Wait for other processes
+      if (sh_buff.buffer[1] != 1) {// If it isn't full, add an item
+        if (sh_buff.buffer[0] == 1) {
+          sh_buff.buffer[0] = 1;
+          shelf++;
+        }
+        else {
+          sh_buff.buffer[1] = 1; // Full
+          shelf++;
+        }
+        printf("Item Created\n");
+      }
+      else {
+        printf("Buffer Full!\n");
+      }
+      sem_post(&sh_buff.full);
+    }
   }
-  
-  // Close and detach semaphores from buffer
-  sem_close(notEmpty);
-  sem_close(notFull);
-  sem_close(mutex);
-  sem_unlink(sem1);
-  sem_unlink(sem2);
-  sem_unlink(sem3);
-  
-  // Close and detach buffer
-  munmap(shelf, sizeof(int));
-  close(shared);
-  shm_unlink("buffer");
   return 0;
 }
