@@ -3,28 +3,18 @@
 This program is an example of the Producer and Consumer Problem, in which
 two different programs work between a buffer to manage items. The producer
 creates the items, and the consumer consumes them, removing them from the
-buffer.
+buffer. The purpose of the project is to give an example of OS tracking of
+processes entering critical sections of code, allowing them to execute the
+needed parts for their program while not interfering with other processes
+that run with them.
 
-The project is in a very rough state, but I am working on it to make it better.
+In this version of the program, there is a maximum of two items that can
+exist at any one time on the buffer. Adding to it when it is full will not
+go through, nor will consuming an item when there are zero in the buffer.
+This particular program uses semaphores to allow certain sections of code to
+execute and provide a system of regulation in the program.
 
-
-Example of Code:
-
-1 to Produce Item  
-2 to Consume Item  
-0 to Exit Program  
-
-Enter Instruction: 1  
-Item Created  
-Enter Instruction: 1  
-Item Created  
-Enter Instruction: 1  
-Buffer Full!  
-Enter Instruction: 2  
-Item Consumed  
-Enter Instruction: 2  
-Item Consumed  
-Enter Instruction 2  
-Buffer Empty!  
-Enter Instruction: 0  
-
+To run the program:
+- 1 will add an item to the buffer
+- 2 will remove an item from the buffer
+- 0 will close the program
