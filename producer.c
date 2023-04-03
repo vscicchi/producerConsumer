@@ -9,12 +9,12 @@ int main() {
   int value = 99; // I/O from user
   
   // Create Semaphores
-  sem_init(&sh_buff.empty, 1, 0);
-  sem_init(&sh_buff.full, 1, 1);
+  sem_init(&sh_buff.notFull, 1, 0);
+  sem_init(&sh_buff.notEmpty, 1, 1);
 
   while (value != 0) { // Until loop finishes...
     if (value == 1) {
-      sem_wait(&sh_buff.empty);
+      sem_wait(&sh_buff.notFull);
       sleep(rand()%2+1); // Wait for other processes
       if (sh_buff.buffer[1] != 1) {// If it isn't full, add an item
         if (sh_buff.buffer[0] == 1) {
@@ -30,13 +30,13 @@ int main() {
       else {
         printf("Buffer Full!\n");
       }
-      sem_post(&sh_buff.full);
+      sem_post(&sh_buff.notEmpty);
     }
   }
     
   // Remove and Detach Semaphores
-  sem_destroy(&sh_buff.empty);
-  sem_destroy(&sh_buff.full);
+  sem_destroy(&sh_buff.notFull);
+  sem_destroy(&sh_buff.notEmpty);
   
   return 0;
 }

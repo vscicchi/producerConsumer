@@ -18,6 +18,6 @@ struct buffer {
   sem_t notEmpty, notFull;
   size_t count; // # of bytes used
   int buffer[BUFFER_SIZE];
-};
+} sh_buff;
 
 #endif

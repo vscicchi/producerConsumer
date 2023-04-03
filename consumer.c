@@ -11,7 +11,7 @@ int main() {
     printf("Enter Instruction: ");
     scanf("%d", value);
     if (value == 2) {
-      sem_wait(&sh_buff.full);
+      sem_wait(&sh_buff.notEmpty);
       sleep(rand()%2+1); // Wait for other processes
       if (sh_buff.buffer[0] != 0) {
         if (sh_buff.buffer[1] != 0) {
@@ -28,7 +28,7 @@ int main() {
         printf("Buffer Empty!\n");
       }
       printf("Item Consumed\n");
-      sem_post(&sh_buff.empty);
+      sem_post(&sh_buff.notFull);
     }
   }
   
