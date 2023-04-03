@@ -32,10 +32,5 @@ int main() {
     }
   }
   
-  // Remove and Detach Semaphores
-  sem_destroy(&sh_buff.empty);
-  sem_destroy(&sh_buff.full);
-  
-  munmpa(shelf, sizeof(int));
   return 0;
 }
